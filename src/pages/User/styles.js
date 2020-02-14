@@ -73,3 +73,17 @@ export const Author = styled.Text`
   color: #666;
   margin-top: 2px;
 `;
+
+export const NavigateButton = styled.TouchableOpacity`
+  background: #7159c1;
+  /* width: 30px; */
+  align-items: center;
+  border-radius: 2px;
+`;
+export const NavigateButtonText = styled.Text`
+  font-size: 13px;
+  color: #fff;
+  font-weight: bold;
+  padding: 1px 15px;
+  text-transform: uppercase;
+`;

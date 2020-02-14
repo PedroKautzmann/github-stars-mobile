@@ -26,6 +26,7 @@ export default class Main extends Component {
       newUser: '',
       users: [],
       loading: false,
+      error: false,
     };
   }
 
@@ -52,26 +53,42 @@ export default class Main extends Component {
   }
 
   handleSubmit = async () => {
-    const { users, newUser, loading } = this.state;
+    try {
+      const { users, newUser } = this.state;
 
-    this.setState({ loading: true });
+      if (newUser === '') {
+        this.setState({ error: true });
 
-    const response = await api.get(`/users/${newUser}`);
+        return;
+      }
 
-    const data = {
-      name: response.data.name,
-      login: response.data.login,
-      bio: response.data.bio,
-      avatar: response.data.avatar_url,
-    };
+      const hasUser = users.find(user => user.login === newUser);
 
-    this.setState({
-      users: [...users, data],
-      newUser: '',
-      loading: false,
-    });
+      if (hasUser) {
+        this.setState({ error: true });
 
-    Keyboard.dismiss();
+        return;
+      }
+
+      this.setState({ loading: true });
+
+      const response = await api.get(`/users/${newUser}`);
+
+      const data = {
+        name: response.data.name,
+        login: response.data.login,
+        bio: response.data.bio,
+        avatar: response.data.avatar_url,
+      };
+
+      this.setState({
+        users: [...users, data],
+        newUser: '',
+        loading: false,
+      });
+
+      Keyboard.dismiss();
+    } catch (err) { }
   };
 
   handleNavigate = user => {
